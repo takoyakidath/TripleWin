@@ -1,30 +1,26 @@
-"use client"
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import TicTacToe from '@/components/TicTacToe'
-type GameMode = 'CPU' | 'friend' | null
-
-export default function GameSelector() {
-  const [gameMode, setGameMode] = useState<GameMode>(null)
-
-  if (gameMode) {
-    return <TicTacToe mode={gameMode} onReset={() => setGameMode(null)} />
-  }
-
+import Link from "next/link";
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
+const GameSelector: React.FC = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-[300px]">
-        <CardHeader>
-          <CardTitle>3目並べ</CardTitle>
-          <CardDescription>ゲームモードを選択してください</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <Button onClick={() => setGameMode('CPU')}>CPUと対戦</Button>
-          <Button onClick={() => setGameMode('friend')}>友達と対戦</Button>
-        </CardContent>
+    <div className="flex flex-col items-center justify-center h-screen">
+      <Card>
+      <h1 className="text-4xl font-bold">Select a game</h1>
+      <ul className="flex space-x-4 mt-4">
+        <li>
+          <Link href={{ pathname: "/play", query: { mode: "friend" } }} className="text-blue-500 hover:underline">
+            <Button>Friend</Button>
+          </Link>
+        </li>
+        <li>
+          <Link href={{ pathname: "/play", query: { mode: "BOT" } }} className="text-blue-500 hover:underline">
+           <Button> BOT</Button>
+          </Link>
+        </li>
+      </ul>
       </Card>
     </div>
-  )
-}
+  );
+};
 
+export default GameSelector;

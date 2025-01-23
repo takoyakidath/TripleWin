@@ -1,7 +1,8 @@
 import GameSelector from "@/components/gameSelector";
-
 export default function Home() {
-  return (
+  return (<div>
+
 <GameSelector />
+</div>
   );
 }
