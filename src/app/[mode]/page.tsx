@@ -1,5 +1,3 @@
-'use strict';
-
 import { Bot, Friend } from '@/components/game';
 
 export default async function Page({ params }: { params: Promise<{ mode: string }> }) {
