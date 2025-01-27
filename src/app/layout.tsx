@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/header";
 import StringBackground from "@/components/background";
-import { Progress } from "@/components/ui/progress"
 import { Toaster } from "@/components/ui/sonner"
 export const metadata: Metadata = {
   title: "TripleWin",

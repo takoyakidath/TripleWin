@@ -8,8 +8,8 @@ const RampartOneFont = Pacifico({
  
 export default function Header() {
     return (
-     <div className="text-center text-4xl not-italic ">
-        <div className={RampartOneFont.className}>TripleWin</div>
-     </div>
+    <div className="text-center text-4xl not-italic">
+       <div className={`${RampartOneFont.className} text-white`}>TripleWin</div>
+    </div>
     );
   }
