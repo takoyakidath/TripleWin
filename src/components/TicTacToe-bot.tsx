@@ -35,6 +35,52 @@ const TicTacToeB = () => {
     return [null, null]
   }
 
+  const minimax = (newBoard: Player[], player: Player): number => {
+    const availSpots = newBoard.reduce((acc, curr, idx) => (curr === null ? acc.concat(idx) : acc), [] as number[]);
+
+    const [newWinner] = checkWinner(newBoard);
+    if (newWinner === "X") return -10;
+    if (newWinner === "O") return 10;
+    if (availSpots.length === 0) return 0;
+
+    const moves: { index: number; score: number }[] = [];
+
+    for (let i = 0; i < availSpots.length; i++) {
+      const move = { index: availSpots[i], score: 0 };
+      newBoard[availSpots[i]] = player;
+
+      if (player === "O") {
+        move.score = minimax(newBoard, "X");
+      } else {
+        move.score = minimax(newBoard, "O");
+      }
+
+      newBoard[availSpots[i]] = null;
+      moves.push(move);
+    }
+
+    let bestMove = 0;
+    if (player === "O") {
+      let bestScore = Number.NEGATIVE_INFINITY;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      let bestScore = Number.POSITIVE_INFINITY;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+
+    return moves[bestMove].index;
+  };
+
   const handleClick = (index: number) => {
     if (board[index] || winner) return
 
@@ -51,7 +97,11 @@ const TicTacToeB = () => {
     }
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleBotMove = () => {
+    const bestMove = minimax(board, "O");
+    handleClick(bestMove);
+  };
+
   const resetGame = () => {
     setBoard(Array(9).fill(null))
     setCurrentPlayer("X")
@@ -61,6 +111,15 @@ const TicTacToeB = () => {
 
   const isBoardFull = board.every((square) => square !== null)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (currentPlayer === "O" && !winner) {
+      handleBotMove();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPlayer, winner])
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (winningLine) {
       const timer = setTimeout(() => {
@@ -68,8 +127,7 @@ const TicTacToeB = () => {
       }, 2000)
       return () => clearTimeout(timer)
     }
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  }, [winningLine, resetGame]) // Added resetGame to dependencies
+  }, [winningLine])
 
   return (
     <div className="flex flex-col items-center">
@@ -99,4 +157,3 @@ const TicTacToeB = () => {
 }
 
 export default TicTacToeB
-
