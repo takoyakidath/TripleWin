@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
 import Board from "@/components/board"
-import GameStatus from "@/components/GameStatus"
-import ResetButton from "@/components/ResetButton"
 
 type Player = "X" | "O" | null
 
-const TicTacToe = () => {
+const TicTacToeB = () => {
   const [board, setBoard] = useState<Player[]>(Array(9).fill(null))
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X")
   const [winner, setWinner] = useState<Player>(null)
@@ -51,12 +51,13 @@ const TicTacToe = () => {
     }
   }
 
-  const resetGame = useCallback(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const resetGame = () => {
     setBoard(Array(9).fill(null))
     setCurrentPlayer("X")
     setWinner(null)
     setWinningLine(null)
-  }, [])
+  }
 
   const isBoardFull = board.every((square) => square !== null)
 
@@ -67,16 +68,35 @@ const TicTacToe = () => {
       }, 2000)
       return () => clearTimeout(timer)
     }
-  }, [winningLine, resetGame])
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  }, [winningLine, resetGame]) // Added resetGame to dependencies
 
   return (
     <div className="flex flex-col items-center">
       <Board board={board} winningLine={winningLine} onSquareClick={handleClick} />
-      <GameStatus winner={winner} currentPlayer={currentPlayer} isBoardFull={isBoardFull} />
-      <ResetButton onClick={resetGame} />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center mb-4"
+      >
+        {winner ? (
+          <p className="text-xl font-bold">{winner === "X" ? "Blue" : "Red"} wins!</p>
+        ) : isBoardFull ? (
+          <p className="text-xl font-bold">It&apos;s a draw!</p>
+        ) : (
+          <p className="text-xl">{currentPlayer === "X" ? "Blue" : "Red"}&apos;s turn</p>
+        )}
+      </motion.div>
+      <Button
+        onClick={resetGame}
+        className="bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors duration-200"
+      >
+        New Game
+      </Button>
     </div>
   )
 }
 
-export default TicTacToe
+export default TicTacToeB
 
