@@ -1,21 +1,26 @@
-# Security Policy
-
-## Supported Versions
-
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+# [EN]Security Policy
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+> [!IMPORTANT]
+> **DONOT** create an issue and write detail in public.
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+If you discover any vulnerabilities on this site, please do not share your details with anyone and contact us.
+
+## Contact method
+
+### Email
+takoyaki@pkopko.jp
+# [日本語]セキュリティポリシー
+
+## 脆弱性を報告する
+
+> [!IMPORTANT]
+> このリポジトリのIssueに詳細を書くのは**絶対におやめください**。
+
+もしこのサイトの脆弱性を発見した場合には、ほかの人に詳細を教えず、ご連絡ください。
+
+### 連絡方法
+
+### Email
+takoyaki@pkopko.jp

@@ -9,7 +9,11 @@ const RampartOneFont = Pacifico({
 export default function Header() {
     return (
     <div className="text-center text-4xl not-italic">
-       <div className={`${RampartOneFont.className} text-white`}>TripleWin</div>
+       <div className={`${RampartOneFont.className} text-white`}>
+        {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
+        {/* biome-ignore lint/suspicious/noAssignInExpressions: <explanation> */}
+        <button onClick={() => window.location.href = "/"} >TripleWin</button>
+       </div>
     </div>
     );
   }

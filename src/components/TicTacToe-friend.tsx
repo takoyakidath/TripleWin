@@ -94,6 +94,13 @@ const TicTacToeF = () => {
       >
         New Game
       </Button>
+      <Button
+        // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+        onClick={() => window.location.href = "/"}
+        className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 mt-4"
+      >
+        Home
+      </Button>
     </div>
   )
 }
