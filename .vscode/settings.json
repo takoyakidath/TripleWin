@@ -1,0 +1,9 @@
+// .vscode/settings.json
+{
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.validate.enable": true,
+    "typescript.format.enable": true,
+    "css.lint.unknownAtRules": "ignore",
+    "editor.defaultFormatter": "biomejs.biome",
+    "prettier.enable": false
+}
