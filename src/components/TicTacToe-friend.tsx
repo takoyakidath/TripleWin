@@ -68,6 +68,7 @@ const TicTacToeF = () => {
       }, 2000)
       return () => clearTimeout(timer)
     }
+    
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   }, [winningLine, resetGame]) // Added resetGame to dependencies
 

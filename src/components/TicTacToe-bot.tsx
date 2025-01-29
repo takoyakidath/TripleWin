@@ -119,15 +119,15 @@ const TicTacToeB = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPlayer, winner])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (winningLine) {
-      const timer = setTimeout(() => {
-        resetGame()
-      }, 2000)
-      return () => clearTimeout(timer)
-    }
-  }, [winningLine])
+
+  //useEffect(() => {
+  //  if (winningLine) {
+  //    const timer = setTimeout(() => {
+  //      resetGame()
+  //    }, 2000)
+  //    return () => clearTimeout(timer)
+  //  }
+  //}, [winningLine])
 
   return (
     <div className="flex flex-col items-center">
