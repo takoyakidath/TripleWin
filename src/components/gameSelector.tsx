@@ -7,17 +7,17 @@ const GameSelector: React.FC = () => {
       <Card className="bg-gray-700 text-primary-foreground border border-gray-700 shadow">
         <h1 className="text-4xl font-bold">Select a game</h1>
         <div className="flex flex-col items-center"> <br />
+        <Link href="/friend" className="text-white hover:underline">
             <Button>
-            <Link href="/friend" className="text-white hover:underline">
               Friend
-            </Link>
             </Button>
-            <div className="mb-1" />
-          <Button>
-            <Link href="/bot" className="text-white hover:underline">
-              BOT
             </Link>
+            <div className="mb-1" />
+            <Link href="/bot" className="text-white hover:underline">
+          <Button>
+              BOT
           </Button>
+          </Link>
         </div>
       </Card>
     </div>
