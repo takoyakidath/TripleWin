@@ -11,7 +11,7 @@ interface BoardProps {
 const Board: React.FC<BoardProps> = ({ board, winningLine, onSquareClick }) => {
   const renderSquare = (index: number) => (
     <motion.div
-      className="w-24 h-24 flex items-center justify-center cursor-pointer bg-white" // ここで背景色を白に設定
+      className="w-24 h-24 flex items-center justify-center cursor-pointer" 
       whileHover={{ backgroundColor: "rgba(0,0,0,0.05)" }}
       onClick={() => onSquareClick(index)}
     >
