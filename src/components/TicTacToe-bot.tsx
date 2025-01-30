@@ -118,17 +118,6 @@ const TicTacToeB = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPlayer, winner])
-
-
-  //useEffect(() => {
-  //  if (winningLine) {
-  //    const timer = setTimeout(() => {
-  //      resetGame()
-  //    }, 2000)
-  //    return () => clearTimeout(timer)
-  //  }
-  //}, [winningLine])
-
   return (
     <div className="flex flex-col items-center">
       <Board board={board} winningLine={winningLine} onSquareClick={handleClick} />

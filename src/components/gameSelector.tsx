@@ -18,6 +18,11 @@ const GameSelector: React.FC = () => {
               BOT
           </Button>
           </Link>
+          <Link href="/ranking" className="text-white hover:underline">
+          <Button>
+              Ranking
+          </Button>
+          </Link>
         </div>
       </Card>
     </div>

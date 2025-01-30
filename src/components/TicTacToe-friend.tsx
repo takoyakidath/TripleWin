@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState} from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Board from "@/components/board"
@@ -51,7 +51,6 @@ const TicTacToeF = () => {
     }
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const resetGame = () => {
     setBoard(Array(9).fill(null))
     setCurrentPlayer("X")
@@ -60,17 +59,6 @@ const TicTacToeF = () => {
   }
 
   const isBoardFull = board.every((square) => square !== null)
-
-  useEffect(() => {
-    if (winningLine) {
-      const timer = setTimeout(() => {
-        resetGame()
-      }, 2000)
-      return () => clearTimeout(timer)
-    }
-    
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  }, [winningLine, resetGame]) // Added resetGame to dependencies
 
   return (
     <div className="flex flex-col items-center">
