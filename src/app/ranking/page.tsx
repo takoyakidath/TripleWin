@@ -9,7 +9,6 @@ export default function Ranking() {
         <p>This ranking is created based on bot data.</p>
         <table>
             <th>
-                <Rankings />
             </th>
         </table>
       </Card>
