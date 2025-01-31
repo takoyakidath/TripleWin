@@ -4,6 +4,7 @@ import { fetchRankings } from '@/components/rankingSet';
 
 export default function Rankings() {
     const [rankings, setRankings] = useState<{ uuid: string; wins: number }[]>([]);
+    const [myUUID, setMyUUID] = useState<string | null>(null);
 
     useEffect(() => {
         const getRankings = async () => {
@@ -11,10 +12,13 @@ export default function Rankings() {
             setRankings(rankingsData);
         };
 
+        const storedUUID = localStorage.getItem('user_uuid');
+        setMyUUID(storedUUID);
+
         getRankings();
     }, []);
 
-    return (<div>
+    return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ display: 'flex', width: '100%', fontWeight: 'bold' }}>
                 <div style={{ flex: 1, padding: '8px' }}>順位</div>
@@ -24,11 +28,13 @@ export default function Rankings() {
             {rankings.map((player, index) => (
                 <div key={player.uuid} style={{ display: 'flex', width: '100%', borderBottom: '1px solid #ccc' }}>
                     <div style={{ flex: 1, padding: '8px' }}>{index + 1}</div>
-                    <div style={{ flex: 2, padding: '8px' }}>{player.uuid}</div>
+                    <div style={{ flex: 2, padding: '8px' }}>
+                        {player.uuid}
+                        {player.uuid === myUUID && <span style={{ marginLeft: '8px', color: 'blue' }}>←You</span>}
+                    </div>
                     <div style={{ flex: 1, padding: '8px' }}>{player.wins}</div>
                 </div>
             ))}
-        </div>
         </div>
     );
 }
