@@ -30,7 +30,7 @@ export default function Rankings() {
                     <div style={{ flex: 1, padding: '8px' }}>{index + 1}</div>
                     <div style={{ flex: 2, padding: '8px' }}>
                         {player.uuid}
-                        {player.uuid === myUUID && <span style={{ marginLeft: '8px', color: 'blue' }}>←You</span>}
+                        {player.uuid === myUUID && <span style={{ marginLeft: '8px', color: 'white' }}>←You</span>}
                     </div>
                     <div style={{ flex: 1, padding: '8px' }}>{player.wins}</div>
                 </div>
