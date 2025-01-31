@@ -20,7 +20,7 @@ export default function RootLayout({
       <div className="absolute inset-0 z-0">
         <StringBackground />
       </div>
-      <div className="relative z-10">
+      <div className="relative z-10 justify-center">
       <Header />
       {children}
       <Toaster />

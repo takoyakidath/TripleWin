@@ -6,14 +6,10 @@ export default function Ranking() {
 
   return (
     <div>
-      <Card>
+      <Card className="bg-gray-700 text-primary-foreground border border-gray-700 shadow">
         <h1 className="text-4xl font-bold">Ranking</h1>
         <p>This ranking is created based on bot data.</p>
-        <table>
-            <th>
-                <Rankings />
-            </th>
-        </table>
+        <Rankings />
       </Card>
       <Button
         // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
