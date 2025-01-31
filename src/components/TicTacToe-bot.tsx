@@ -4,6 +4,12 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Board from "@/components/board"
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 type Player = "X" | "O" | null
 
@@ -92,6 +98,7 @@ const TicTacToeB = () => {
     if (newWinner) {
       setWinner(newWinner)
       setWinningLine(newWinningLine)
+      saveGameResult(newWinner);
     } else {
       setCurrentPlayer(currentPlayer === "X" ? "O" : "X")
     }
@@ -118,6 +125,27 @@ const TicTacToeB = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPlayer, winner])
+
+  const saveGameResult = async (winner: Player) => {
+    const userUuid = localStorage.getItem('user_uuid');
+    if (!userUuid) {
+      console.error('No user UUID found in local storage.');
+      return;
+    }
+
+    const result = winner === "X" ? "win" : "lose";
+    const { data, error } = await supabase
+      .from('game_results') // 'game_results' テーブルにデータを挿入
+      .insert([{ uuid: userUuid, result }]);
+
+    if (error) {
+      console.error('Error inserting game result into Supabase:', error.message, error.details);
+      return;
+    }
+
+    console.log('Game result inserted into Supabase:', data);
+  };
+
   return (
     <div className="flex flex-col items-center">
       <Board board={board} winningLine={winningLine} onSquareClick={handleClick} />
