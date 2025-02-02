@@ -22,6 +22,21 @@ const TicTacToeB = () => {
   const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X")
   const [winner, setWinner] = useState<Player>(null)
   const [winningLine, setWinningLine] = useState<number[] | null>(null)
+  const [ipAddress, setIpAddress] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchIpAddress = async () => {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        setIpAddress(data.ip);
+      } catch (error) {
+        console.error('Error fetching IP address:', error);
+      }
+    };
+
+    fetchIpAddress();
+  }, []);
 
   const checkWinner = (squares: Player[]): [Player, number[] | null] => {
     const lines = [
@@ -140,7 +155,8 @@ const TicTacToeB = () => {
     const result = winner === "X" ? "win" : "lose";
     const { data, error } = await supabase
       .from('game_results') // 'game_results' テーブルにデータを挿入
-      .insert([{ uuid: userUuid, result }]);
+      .insert([{ uuid: userUuid, result, ip: ipAddress }]);
+      
 
     if (error) {
       console.error('Error inserting game result into Supabase:', error.message, error.details);
@@ -149,6 +165,8 @@ const TicTacToeB = () => {
 
     console.log('Game result inserted into Supabase:', data);
   };
+
+
 
   return (
     <div className="flex flex-col items-center">

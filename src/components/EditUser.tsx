@@ -6,50 +6,55 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
-  import { Input } from "@/components/ui/input"
-  import { Label } from "@/components/ui/label"
-  import { Button } from "@/components/ui/button"
-export default function EditUser() {
-  return (
-    <div>
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Share</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Share link</DialogTitle>
-          <DialogDescription>
-            Anyone who has this link will be able to view this.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex items-center space-x-2">
-          <div className="grid flex-1 gap-2">
-            <Label htmlFor="link" className="sr-only">
-              Link
-            </Label>
-            <Input
-              id="link"
-              defaultValue="https://ui.shadcn.com/docs/installation"
-              readOnly
-            />
-          </div>
-          <Button type="submit" size="sm" className="px-3">
-            <span className="sr-only">Copy</span>
-            <Copy />
-          </Button>
-        </div>
-        <DialogFooter className="sm:justify-start">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-    </div>
-  );
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+
+interface EditUserProps {
+    onClose: () => void;
+}
+
+export default function EditUser({ onClose }: EditUserProps) {
+    const [newUUID, setNewUUID] = useState('');
+
+    const handleSendClick = () => {
+        localStorage.setItem('user_uuid', newUUID);
+        console.log('User UUID updated to', newUUID);
+        onClose();
+    };
+
+    return (
+        <Dialog open={true}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>Edit UserName</DialogTitle>
+                    <DialogDescription>
+                        Please change your username
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="flex items-center space-x-2">
+                    <div className="grid flex-1 gap-2">
+                        <Label htmlFor="name" className="sr-only">
+                            Name
+                        </Label>
+                        <Input
+                            id="name"
+                            value={newUUID}
+                            onChange={(e) => setNewUUID(e.target.value)}
+                        />
+                    </div>
+                    <Button type="button" onClick={handleSendClick}>
+                        Send
+                    </Button>
+                </div>
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button type="button" onClick={onClose}>Close</Button>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
 }
