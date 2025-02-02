@@ -17,11 +17,11 @@ interface EditUserProps {
 }
 
 export default function EditUser({ onClose }: EditUserProps) {
-    const [newUUID, setNewUUID] = useState('');
+    const [User, setUser] = useState('');
 
     const handleSendClick = () => {
-        localStorage.setItem('user_uuid', newUUID);
-        console.log('User UUID updated to', newUUID);
+        localStorage.setItem('user_id', User);
+        console.log('User UserID updated to', User);
         onClose();
     };
 
@@ -41,8 +41,8 @@ export default function EditUser({ onClose }: EditUserProps) {
                         </Label>
                         <Input
                             id="name"
-                            value={newUUID}
-                            onChange={(e) => setNewUUID(e.target.value)}
+                            value={User}
+                            onChange={(e) => setUser(e.target.value)}
                         />
                     </div>
                     <Button type="button" onClick={handleSendClick}>
