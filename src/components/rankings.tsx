@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { fetchRankings } from '@/components/rankingSet';
+import { Button } from './ui/button';
 
 export default function Rankings() {
     const [rankings, setRankings] = useState<{ uuid: string; wins: number }[]>([]);
