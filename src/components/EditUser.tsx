@@ -22,26 +22,34 @@ if (!supabaseUrl || !supabaseAnonKey) {
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface EditUserProps {
-    onClose: () => void;
+    isOpen: boolean,
+    onClose: () => void,
 }
 
-export default function EditUser({ onClose }: EditUserProps) {
+export default function EditUser({ isOpen, onClose }: EditUserProps) {
     const [userID, setUserID] = useState('');
 
     const handleSendClick = async () => {
         const oldUserID = localStorage.getItem('user_uuid');
         if (!oldUserID) {
-            console.error('No user UUID found in local storage.');
+            console.error('No user userID found in local storage.');
             return;
         }
 
-        localStorage.setItem('user_uuid', userID);
-        console.log('User UUID updated to', userID);
+        // Validate the userID
+        if (!userID) {
+            console.error('No userID entered.');
+            alert('Please enter a userID.');
+            return;
+        }
+
+        localStorage.setItem('user_userID', userID);
+        console.log('User userID updated to', userID);
 
         const { data, error } = await supabase
             .from('users')
-            .update({ uuid: userID })
-            .eq('uuid', oldUserID);
+            .update({ userID: userID })
+            .eq('userID', oldUserID);
 
         if (error) {
             console.error('Error updating user UUID in Supabase:', error.message, error.details);
@@ -55,7 +63,7 @@ export default function EditUser({ onClose }: EditUserProps) {
     };
 
     return (
-        <Dialog open={true}>
+        <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>Edit UserName</DialogTitle>
@@ -78,11 +86,6 @@ export default function EditUser({ onClose }: EditUserProps) {
                         Send
                     </Button>
                 </div>
-                <DialogFooter>
-                    <DialogClose asChild>
-                        <Button type="button" onClick={onClose}>Close</Button>
-                    </DialogClose>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

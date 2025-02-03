@@ -14,7 +14,7 @@ export default function Ranking() {
 
     return (
         <div>
-            {isEditing && <EditUser onClose={handleEditUserClick} />}
+            {isEditing && <EditUser onClose={handleEditUserClick} isOpen={isEditing} />}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', width: '100%' }}>
                 <Button style={{ position: 'absolute', top: '10px', right: '10px' }} onClick={handleEditUserClick}>
                     {isEditing ? 'Close Edit' : 'Edit User'}
