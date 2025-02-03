@@ -15,13 +15,13 @@ export default function Ranking() {
     return (
         <div>
             {isEditing && <EditUser onClose={handleEditUserClick} isOpen={isEditing} />}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', width: '100%' }}>
-                <Button style={{ position: 'absolute', top: '10px', right: '10px' }} onClick={handleEditUserClick}>
-                    {isEditing ? 'Close Edit' : 'Edit User'}
-                </Button>
-            </div>
-            <Card className="bg-gray-700 text-primary-foreground border border-gray-700 shadow">
-                <h1 className="text-4xl font-bold">Ranking</h1>
+            <Card className="bg-gray-700 text-primary-foreground border border-gray-700 shadow m-4 p-4">
+                <div className="flex items-center justify-between mb-4" >
+                    <h1 className="text-4xl font-bold">Ranking</h1>
+                    <Button onClick={handleEditUserClick} className="ml-4">
+                        {isEditing ? 'Close Edit' : 'Edit User'}
+                    </Button>
+                </div>
                 <p>This ranking is created based on bot data.</p>
                 <Rankings />
             </Card>

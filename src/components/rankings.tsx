@@ -20,7 +20,7 @@ export default function Rankings() {
     }, []);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div className='scroll-overflow flex flex-col items-center'>
             <div style={{ display: 'flex', width: '100%', fontWeight: 'bold' }}>
                 <div style={{ flex: 1, padding: '8px' }}>順位</div>
                 <div style={{ flex: 2, padding: '8px' }}>UUID</div>
