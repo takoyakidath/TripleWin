@@ -1,19 +1,16 @@
 "use client"
-import { Pacifico } from "next/font/google";
 
-const RampartOneFont = Pacifico({
-  weight: "400",
-  subsets: ["latin"],
-});
- 
+import Logo from "./logo";
+import Link from "next/link";
+
 export default function Header() {
     return (
     <div className="text-center text-4xl not-italic">
-       <div className={`${RampartOneFont.className} text-white`}>
-        {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-        {/* biome-ignore lint/suspicious/noAssignInExpressions: <explanation> */}
-        <button onClick={() => window.location.href = "/"} >TripleWin</button>
-       </div>
+        <Link href="/" className="w-full" >
+        <div className="flex justify-center max-w-xl mx-auto">
+        <Logo />
+        </div>
+        </Link>
     </div>
     );
   }
