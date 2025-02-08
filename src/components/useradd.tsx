@@ -25,13 +25,13 @@ export default function Useradd() {
             // IPアドレスの取得
             const response = await fetch('https://api.ipify.org?format=json');
             const data = await response.json();
-            const ip = data.ip;
-            console.log('User IP Address:', ip);
+            const IP = data.ip;
+            console.log('User IP Address:', IP);
 
             // SupabaseにUUIDとIPアドレスを保存
             const { data: supabaseData, error } = await supabase
                 .from('users') // 'users' テーブルにデータを挿入
-                .insert([{ uuid, ip }]);
+                .insert([{ uuid, IP }]);
 
             if (error) {
                 console.error('Error inserting UUID and IP into Supabase:', error.message, error.details);

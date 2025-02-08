@@ -11,15 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Missing Supabase URL or anon key');
-}
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface EditUserProps {
     isOpen: boolean,
@@ -30,7 +21,7 @@ export default function EditUser({ isOpen, onClose }: EditUserProps) {
     const [userID, setUserID] = useState('');
 
     const handleSendClick = async () => {
-        const oldUserID = localStorage.getItem('user_uuid');
+        const oldUserID = localStorage.getItem('user_userID');
         if (!oldUserID) {
             console.error('No user userID found in local storage.');
             return;
@@ -46,17 +37,21 @@ export default function EditUser({ isOpen, onClose }: EditUserProps) {
         localStorage.setItem('user_userID', userID);
         console.log('User userID updated to', userID);
 
-        const { data, error } = await supabase
-            .from('users')
-            .update({ userID: userID })
-            .eq('userID', oldUserID);
+        const response = await fetch('/api/editUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ oldUserID, newUserID: userID }),
+        });
 
-        if (error) {
-            console.error('Error updating user UUID in Supabase:', error.message, error.details);
-        } else if (data) {
-            console.log('User UUID updated in Supabase:', data);
+        if (!response.ok) {
+            console.error('Error updating user UUID in Supabase:', response.statusText);
         } else {
-            console.log('No data returned from Supabase update.');
+            const data = await response.json();
+            console.log('User UUID updated in Supabase:', data);
+            // 新しいユーザーIDをローカルストレージに保存
+            localStorage.setItem('user_userID', userID);
         }
 
         onClose();

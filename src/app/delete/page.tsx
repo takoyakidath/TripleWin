@@ -1,21 +1,25 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
+
 const DeleteLocalStorage = () => {
+  const router = useRouter();
+
   const handleDelete = () => {
     localStorage.removeItem("user_uuid");
     console.log("Local storage cleared.");
     alert("ローカルストレージが削除されました。");
+    router.push("/");
   };
+
+  useEffect(() => {
+    handleDelete();
+  }, []);
 
   return (
     <div>
-      <Card>
-        {" "}
-        <h1>ローカルストレージ削除</h1>
-        {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-        <button onClick={handleDelete}>ローカルストレージを削除</button>
-      </Card>
+        {/* handleDeleteはuseEffectで実行されるため、ここでは削除 */}
     </div>
   );
 };

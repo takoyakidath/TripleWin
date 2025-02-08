@@ -24,5 +24,9 @@ export async function POST(req: Request) {
         return await ApiResponse({ error: error.message }, 500);
     }
 
-    return await ApiResponse({ data }); 
+    if (!data) {
+        return await ApiResponse({ error: 'Failed to insert data' }, 500);
+    }
+
+    return await ApiResponse({ data: data[0] }); 
 }

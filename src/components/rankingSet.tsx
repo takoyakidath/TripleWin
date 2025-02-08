@@ -1,6 +1,6 @@
 "use client"
 
-export async function fetchRankings(): Promise<{ uuid: string; wins: number }[]> {
+export async function fetchRankings(): Promise<{ uuid: string; wins: number; }[]> {
     try {
         const response = await fetch('/api/rankings', {
             method: 'GET',
