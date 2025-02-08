@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { ApiResponse } from '@/lib/ApiResponse';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -9,25 +9,20 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
-        const { uuid, result, ip } = req.body;
+export async function POST(req: Request): Promise<Response> {
+    const { uuid, result, ip } = await req.json();
 
-        if (!uuid || !result || !ip) {
-            return res.status(400).json({ error: 'UUID, result, and IP are required' });
-        }
-
-        const { data, error } = await supabase
-            .from('game_results')
-            .insert([{ uuid, result, ip }]);
-
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
-
-        return res.status(200).json({ data });
-    } else {
-        res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+    if (!uuid || !result || !ip) {
+        return await ApiResponse({ error: 'UUID, result, and IP are required' }, 400);
     }
+
+    const { data, error } = await supabase
+        .from('game_results')
+        .insert([{ uuid, result, ip }]);
+
+    if (error) {
+        return await ApiResponse({ error: error.message }, 500);
+    }
+
+    return await ApiResponse({ data });
 }

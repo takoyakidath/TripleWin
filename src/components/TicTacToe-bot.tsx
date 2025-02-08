@@ -153,7 +153,9 @@ const TicTacToeB = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save game result');
+        const errorText = await response.text();
+        console.error(`Failed to save game result: ${errorText}`);
+        throw new Error(`Failed to save game result: ${errorText}`);
       }
 
       const data = await response.json();
