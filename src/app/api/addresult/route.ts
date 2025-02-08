@@ -16,7 +16,7 @@ export async function POST(req: Request): Promise<Response> {
         return await ApiResponse({ error: 'UUID, result, and IP are required' }, 400);
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
         .from('game_results')
         .insert([{ uuid, result, ip }]);
 
@@ -24,5 +24,5 @@ export async function POST(req: Request): Promise<Response> {
         return await ApiResponse({ error: error.message }, 500);
     }
 
-    return await ApiResponse({ data });
+    return await ApiResponse({ uuid, result, ip });
 }
