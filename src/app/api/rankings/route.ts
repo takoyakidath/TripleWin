@@ -28,5 +28,6 @@ export async function GET(req: Request) {
         .map(([uuid, wins]) => ({ uuid, wins }))
         .sort((a, b) => b.wins - a.wins);
 
+
     return await ApiResponse(sortedRankings);
 }
