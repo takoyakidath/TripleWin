@@ -14,6 +14,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function Useradd() {
+    const router = useRouter(); // useRouterをフックの外で宣言
+
     useEffect(() => {
         const createUser = async () => {
             const uuid = uuidv4();
@@ -33,8 +35,7 @@ export default function Useradd() {
 
             if (error) {
                 console.error('Error inserting UUID and IP into Supabase:', error.message, error.details);
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                useRouter().refresh()
+                router.refresh(); // useRouterを使用
                 return;
             }
 
@@ -51,7 +52,7 @@ export default function Useradd() {
         };
 
         checkUser();
-    }, []);
+    }, [router]);
 
     return <div>ユーザーを作成中...</div>;
 }

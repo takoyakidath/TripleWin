@@ -4,16 +4,6 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Board from "@/components/board"
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("Missing Supabase URL or anonymous key.");
-}
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 type Player = "X" | "O" | null
 
@@ -153,20 +143,25 @@ const TicTacToeB = () => {
     }
 
     const result = winner === "X" ? "win" : "lose";
-    const { data, error } = await supabase
-      .from('game_results') // 'game_results' テーブルにデータを挿入
-      .insert([{ uuid: userUuid, result, ip: ipAddress }]);
-      
+    try {
+      const response = await fetch('/api/addresult', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ uuid: userUuid, result, ip: ipAddress }),
+      });
 
-    if (error) {
-      console.error('Error inserting game result into Supabase:', error.message, error.details);
-      return;
+      if (!response.ok) {
+        throw new Error('Failed to save game result');
+      }
+
+      const data = await response.json();
+      console.log('Game result inserted into Supabase:', data);
+    } catch (error) {
+      console.error('Error inserting game result into Supabase:', error);
     }
-
-    console.log('Game result inserted into Supabase:', data);
   };
-
-
 
   return (
     <div className="flex flex-col items-center">
