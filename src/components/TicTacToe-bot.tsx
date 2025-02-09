@@ -137,10 +137,16 @@ const TicTacToeB = () => {
 
   const saveGameResult = async (winner: Player) => {
     const userUuid = localStorage.getItem('user_uuid');
+    const userid = localStorage.getItem('user_id');
     if (!userUuid) {
       console.error('No user UUID found in local storage.');
       return;
     }
+    if (!userid) {
+      console.error('No user UUID found in local storage.');
+      return;
+    }
+
 
     const result = winner === "X" ? "win" : "lose";
     try {
@@ -149,7 +155,7 @@ const TicTacToeB = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uuid: userUuid, result, ip: ipAddress }),
+        body: JSON.stringify({ uuid: userUuid, result, ip: ipAddress,userid }),
       });
 
       if (!response.ok) {

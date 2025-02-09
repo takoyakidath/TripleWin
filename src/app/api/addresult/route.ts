@@ -9,16 +9,19 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    if (req.method === 'POST') {
+        const { uuid, result, ip, userid } = req.body;
 export async function POST(req: Request): Promise<Response> {
     const { uuid, result, ip } = await req.json();
 
-    if (!uuid || !result || !ip) {
-        return await ApiResponse({ error: 'UUID, result, and IP are required' }, 400);
-    }
+        if (!uuid || !result || !ip || !userid) {
+            return res.status(400).json({ error: 'UUID, result, and IP are required' });
+        }
 
     const { error } = await supabase
         .from('game_results')
-        .insert([{ uuid, result, ip }]);
+        .insert([{ uuid, result, ip, userid }]);
 
     if (error) {
         return await ApiResponse({ error: error.message }, 500);
