@@ -1,5 +1,6 @@
 import { ApiResponse } from '@/lib/ApiResponse';
 import { createClient } from '@supabase/supabase-js';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -11,12 +12,10 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-        const { uuid, result, ip, userid } = req.body;
-export async function POST(req: Request): Promise<Response> {
-    const { uuid, result, ip } = await req.json();
+const { uuid, result, ip, userid } = req.body;
 
         if (!uuid || !result || !ip || !userid) {
-            return res.status(400).json({ error: 'UUID, result, and IP are required' });
+            return await ApiResponse({ error: 'UUID, result, and IP are required' }, 400);
         }
 
     const { error } = await supabase
@@ -28,4 +27,5 @@ export async function POST(req: Request): Promise<Response> {
     }
 
     return await ApiResponse({ uuid, result, ip });
+    }
 }

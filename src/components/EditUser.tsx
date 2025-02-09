@@ -16,10 +16,10 @@ import { useState } from 'react';
 
 interface EditUserProps {
     isOpen: boolean,
-    onClose: () => void,
+    onCloseAction: () => void,
 }
 
-export default function EditUser({ isOpen, onClose }: EditUserProps) {
+export default function EditUser({ isOpen, onCloseAction }: EditUserProps) {
     const [userID, setUserID] = useState('');
 
     const handleSendClick = async () => {
@@ -54,11 +54,11 @@ export default function EditUser({ isOpen, onClose }: EditUserProps) {
             localStorage.setItem('user_uuid', userID);
         }
 
-        onClose();
+        onCloseAction();
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
+        <Dialog open={isOpen} onOpenChange={onCloseAction}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle>Edit UserName</DialogTitle>

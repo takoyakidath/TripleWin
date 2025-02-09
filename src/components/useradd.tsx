@@ -31,7 +31,7 @@ export default function Useradd() {
             // SupabaseにUUIDとIPアドレスを保存
             const { data: supabaseData, error } = await supabase
                 .from('users') // 'users' テーブルにデータを挿入
-                .insert([{ uuid, IP, userid: uuid }]);
+                .insert([{ uuid, IP }]);
 
             if (error) {
                 console.error('Error inserting UUID and IP into Supabase:', error.message, error.details);
