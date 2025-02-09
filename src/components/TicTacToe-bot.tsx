@@ -5,7 +5,7 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Board from "@/components/board"
 
-type Player = "X" | "O" | null
+type Player = "X" | "O" | null;
 
 const TicTacToeB = () => {
   const [board, setBoard] = useState<Player[]>(Array(9).fill(null))

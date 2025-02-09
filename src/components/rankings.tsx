@@ -23,14 +23,14 @@ export default function Rankings() {
         <div className='scroll-overflow flex flex-col items-center'>
             <div style={{ display: 'flex', width: '100%', fontWeight: 'bold' }}>
                 <div style={{ flex: 1, padding: '8px' }}>順位</div>
-                <div style={{ flex: 2, padding: '8px' }}>UUID</div>
+                <div style={{ flex: 2, padding: '8px' }}>NAME</div>
                 <div style={{ flex: 1, padding: '8px' }}>勝利数</div>
             </div>
-            {rankings.map((player, index) => (
+            {rankings.map((player: any, index) => (
                 <div key={player.uuid} style={{ display: 'flex', width: '100%', borderBottom: '1px solid #ccc' }} className='scroll-overflow'>
                     <div style={{ flex: 1, padding: '8px' }}>{index + 1}</div>
                     <div style={{ flex: 2, padding: '8px' }}>
-                        {player.uuid}
+                        {player.userid || player.uuid}
                         {player.uuid === myUUID && <span style={{ marginLeft: '8px', color: 'white' }}>←You</span>}
                     </div>
                     <div style={{ flex: 1, padding: '8px' }}>{player.wins}</div>

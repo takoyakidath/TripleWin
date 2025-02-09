@@ -1,6 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { ApiResponse } from "@/lib/ApiResponse";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+export async function POST(req: Request): Promise<Response> {
+    return ApiResponse({ message: 'Page not found' }, 404);
 }

@@ -1,43 +1,44 @@
-import { NextResponse } from 'next/server';
+import { ApiResponse } from '@/lib/ApiResponse';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Missing Supabase URL or anon key');
-}
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabaseUrl: string = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const supabaseAnonKey: string  = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
 export async function POST(request: Request) {
-    const { oldUserID, newUserID } = await request.json();
+    try {
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-    // UUIDを取得
-    const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('uuid')
-        .eq('userID', oldUserID)
-        .single();
+        const { oldUserID, newUserID } = await request.json();
 
-    if (userError || !userData) {
-        console.error('Error fetching user UUID from Supabase:', userError?.message || 'User not found');
-        return NextResponse.json({ error: userError?.message || 'User not found' }, { status: 500 });
+        // UUIDを取得
+        const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('uuid')
+            .eq('userid', oldUserID)
+            .single();
+    
+        if (userError || !userData) {
+            console.error('Error fetching user UUID from Supabase:', userError?.message || 'User not found');
+            return ApiResponse({ error: userError?.message || 'User not found' }, 500);
+        }
+    
+        const uuid = userData.uuid;
+    
+        // UUIDに基づいて他のカラムにuserIDを追加
+        const { error } = await supabase
+            .from('users')
+            .update({ userid: newUserID })
+            .eq('uuid', uuid);
+    
+        if (error) {
+            console.error('Error updating user UUID in Supabase:', error.message);
+            console.error('Supabase response:', error);
+            return ApiResponse({ error: error.message, details: error.details, hint: error.hint }, 500);
+        }
+    
+        console.log('Supabase response:', { userid: newUserID });
+        return ApiResponse({ userid: newUserID });
+    } catch (e: any) {
+        return ApiResponse({ error: e.message });
     }
-
-    const uuid = userData.uuid;
-
-    // UUIDに基づいて他のカラムにuserIDを追加
-    const { data, error } = await supabase
-        .from('users')
-        .update({ userID: newUserID })
-        .eq('uuid', uuid);
-
-    if (error) {
-        console.error('Error updating user UUID in Supabase:', error.message);
-        console.error('Supabase response:', error);
-        return NextResponse.json({ error: error.message, details: error.details, hint: error.hint }, { status: 500 });
-    }
-
-    console.log('Supabase response:', data);
-    return NextResponse.json({ data });
 }

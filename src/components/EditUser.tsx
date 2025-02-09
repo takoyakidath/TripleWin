@@ -1,3 +1,5 @@
+'use client';
+
 import {
     Dialog,
     DialogClose,
@@ -21,7 +23,8 @@ export default function EditUser({ isOpen, onClose }: EditUserProps) {
     const [userID, setUserID] = useState('');
 
     const handleSendClick = async () => {
-        const oldUserID = localStorage.getItem('user_userID');
+        const oldUserID = localStorage.getItem('user_uuid');
+        console.log(oldUserID);
         if (!oldUserID) {
             console.error('No user userID found in local storage.');
             return;
@@ -33,9 +36,6 @@ export default function EditUser({ isOpen, onClose }: EditUserProps) {
             alert('Please enter a userID.');
             return;
         }
-
-        localStorage.setItem('user_userID', userID);
-        console.log('User userID updated to', userID);
 
         const response = await fetch('/api/editUser', {
             method: 'POST',
@@ -51,7 +51,7 @@ export default function EditUser({ isOpen, onClose }: EditUserProps) {
             const data = await response.json();
             console.log('User UUID updated in Supabase:', data);
             // 新しいユーザーIDをローカルストレージに保存
-            localStorage.setItem('user_userID', userID);
+            localStorage.setItem('user_uuid', userID);
         }
 
         onClose();

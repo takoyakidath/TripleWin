@@ -10,10 +10,19 @@ if (!supabaseUrl || !supabaseAnonKey) {
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function GET(req: Request) {
-    const { data, error } = await supabase
+    const url = new URL(req.url);
+    const userId = url.searchParams.get('userId');
+
+    let query = supabase
         .from('game_results')
         .select('uuid, result')
         .eq('result', 'win');
+
+    if (userId) {
+        query = query.eq('uuid', userId);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
         return await ApiResponse({ error: error.message }, 500);
@@ -27,7 +36,6 @@ export async function GET(req: Request) {
     const sortedRankings = Object.entries(winCounts)
         .map(([uuid, wins]) => ({ uuid, wins }))
         .sort((a, b) => b.wins - a.wins);
-
 
     return await ApiResponse(sortedRankings);
 }
