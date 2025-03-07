@@ -51,7 +51,7 @@ export default function EditUser({ isOpen, onCloseAction }: EditUserProps) {
             const data = await response.json();
             console.log('User UUID updated in Supabase:', data);
             // 新しいユーザーIDをローカルストレージに保存
-            localStorage.setItem('user_uuid', userID);
+            localStorage.setItem('user_id', userID);
         }
 
         onCloseAction();

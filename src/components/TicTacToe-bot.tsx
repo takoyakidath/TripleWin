@@ -142,20 +142,20 @@ const TicTacToeB = () => {
       console.error('No user UUID found in local storage.');
       return;
     }
-    if (!userid) {
-      console.error('No user id found in local storage.');
-      return;
-    }
-
 
     const result = winner === "X" ? "win" : "lose";
+    const body: { uuid: string; result: string; ip: string | null; userid?: string | null } = { uuid, result, ip: ipAddress };
+    if (userid) {
+      body.userid = userid;
+    }
+
     try {
       const response = await fetch('/api/addresult', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uuid: uuid, result, ip: ipAddress,userid }),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {

@@ -12,20 +12,27 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-const { uuid, result, ip, userid } = req.body;
+        const { uuid, result, ip, userid } = req.body;
 
-        if (!uuid || !result || !ip || !userid) {
-            return await ApiResponse({ error: 'UUID, result, and IP are required' }, 400);
+        if (!uuid || !result || !ip) {
+            return res.status(400).json({ error: 'UUID, result, and IP are required' });
         }
 
-    const { error } = await supabase
-        .from('game_results')
-        .insert([{ uuid, result, ip, userid }]);
+        const insertData: { uuid: any; result: any; ip: any; userid?: any } = { uuid, result, ip };
+        if (userid) {
+            insertData.userid = userid;
+        }
 
-    if (error) {
-        return await ApiResponse({ error: error.message }, 500);
-    }
+        const { error } = await supabase
+            .from('game_results')
+            .insert([insertData]);
 
-    return await ApiResponse({ uuid, result, ip });
+        if (error) {
+            return res.status(500).json({ error: error.message });
+        }
+
+        return res.status(200).json({ uuid, result, ip, userid });
+    } else {
+        return res.status(405).json({ error: 'Method Not Allowed' });
     }
 }

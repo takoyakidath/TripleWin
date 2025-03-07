@@ -26,7 +26,7 @@ export default function Rankings() {
                 <div style={{ flex: 2, padding: '8px' }}>NAME</div>
                 <div style={{ flex: 1, padding: '8px' }}>勝利数</div>
             </div>
-            {rankings.map((player: any, index) => (
+            {rankings.map((player: { uuid: string; wins: number; userid?: string }, index) => (
                 <div key={player.uuid} style={{ display: 'flex', width: '100%', borderBottom: '1px solid #ccc' }} className='scroll-overflow'>
                     <div style={{ flex: 1, padding: '8px' }}>{index + 1}</div>
                     <div style={{ flex: 2, padding: '8px' }}>

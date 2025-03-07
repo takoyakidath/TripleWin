@@ -28,13 +28,24 @@ export async function GET(req: Request) {
         return await ApiResponse({ error: error.message }, 500);
     }
 
+    const userIds = await supabase
+        .from('users')
+        .select('userid, uuid')
+        .in('uuid', data.map(({ uuid }) => uuid));
+
+    if (userIds.error) {
+        return await ApiResponse({ error: userIds.error.message }, 500);
+    }
+
     const winCounts = data.reduce((acc, { uuid }) => {
-        acc[uuid] = (acc[uuid] || 0) + 1;
+        const user = userIds.data.find(user => user.uuid === uuid);
+        const id = user ? user.userid : uuid;
+        acc[id] = (acc[id] || 0) + 1;
         return acc;
     }, {} as Record<string, number>);
 
     const sortedRankings = Object.entries(winCounts)
-        .map(([uuid, wins]) => ({ uuid, wins }))
+        .map(([id, wins]) => ({ id, wins }))
         .sort((a, b) => b.wins - a.wins);
 
     return await ApiResponse(sortedRankings);
