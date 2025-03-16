@@ -21,23 +21,23 @@ const checkWinner = (squares: Player[]): [Player, number[] | null] => {
     return [null, null]
 }
 
-const minimax = (newBoard: Player[], player: Player): number => {
+const minimax = (newBoard: Player[], player: Player): { index: number, score: number } => {
     const availSpots = newBoard.reduce((acc, curr, idx) => (curr === null ? acc.concat(idx) : acc), [] as number[])
     const [newWinner] = checkWinner(newBoard)
-    if (newWinner === "X") return -10
-    if (newWinner === "O") return 10
-    if (availSpots.length === 0) return 0
+    if (newWinner === "X") return { index: -1, score: -10 }
+    if (newWinner === "O") return { index: -1, score: 10 }
+    if (availSpots.length === 0) return { index: -1, score: 0 }
 
     const moves = availSpots.map((spot) => {
         newBoard[spot] = player
-        const score = minimax(newBoard, player === "O" ? "X" : "O")
+        const result = minimax(newBoard, player === "O" ? "X" : "O")
         newBoard[spot] = null
-        return { index: spot, score }
+        return { index: spot, score: result.score }
     })
 
     return player === "O"
-        ? moves.reduce((best, move) => (move.score > best.score ? move : best), { index: -1, score: Number.NEGATIVE_INFINITY }).index
-        : moves.reduce((best, move) => (move.score < best.score ? move : best), { index: -1, score: Number.POSITIVE_INFINITY }).index
+        ? moves.reduce((best, move) => (move.score > best.score ? move : best), { index: -1, score: Number.NEGATIVE_INFINITY })
+        : moves.reduce((best, move) => (move.score < best.score ? move : best), { index: -1, score: Number.POSITIVE_INFINITY })
 }
 
 const TicTacToeB = () => {
@@ -48,7 +48,7 @@ const TicTacToeB = () => {
 
     useEffect(() => {
         if (currentPlayer === "O" && !winner) {
-            const bestMove = minimax(board, "O")
+            const bestMove = minimax(board, "O").index
             if (bestMove !== -1) {
                 handleClick(bestMove, true)
             }
