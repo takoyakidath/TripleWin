@@ -13,8 +13,7 @@ const DeleteLocalStorage = () => {
       <Card>
         {" "}
         <h1>ローカルストレージ削除</h1>
-        {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-        <button onClick={handleDelete}>ローカルストレージを削除</button>
+        <button type="button" onClick={handleDelete}>ローカルストレージを削除</button>
       </Card>
     </div>
   );
