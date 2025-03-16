@@ -1,7 +1,7 @@
 "use client"
-
 import { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
+import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
 import Board from "@/components/board"
 
@@ -24,14 +24,15 @@ const checkWinner = (squares: Player[]): [Player, number[] | null] => {
 const minimax = (newBoard: Player[], player: Player): { index: number, score: number } => {
     const availSpots = newBoard.reduce((acc, curr, idx) => (curr === null ? acc.concat(idx) : acc), [] as number[])
     const [newWinner] = checkWinner(newBoard)
+
     if (newWinner === "X") return { index: -1, score: -10 }
     if (newWinner === "O") return { index: -1, score: 10 }
     if (availSpots.length === 0) return { index: -1, score: 0 }
 
     const moves = availSpots.map((spot) => {
-        newBoard[spot] = player
-        const result = minimax(newBoard, player === "O" ? "X" : "O")
-        newBoard[spot] = null
+        const tempBoard = [...newBoard]
+        tempBoard[spot] = player
+        const result = minimax(tempBoard, player === "O" ? "X" : "O")
         return { index: spot, score: result.score }
     })
 
@@ -45,18 +46,26 @@ const TicTacToeB = () => {
     const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X")
     const [winner, setWinner] = useState<Player>(null)
     const [winningLine, setWinningLine] = useState<number[] | null>(null)
+    const [strength, setStrength] = useState(50) // 初期値50（50%の確率で賢く動く）
 
     useEffect(() => {
         if (currentPlayer === "O" && !winner) {
             setTimeout(() => {
-                const bestMove = minimax(board, "O").index
+                let bestMove: number
+                if (Math.random() * 100 < strength) {
+                    // 指定した確率で minimax を適用
+                    bestMove = minimax(board, "O").index
+                } else {
+                    // 残りの空いているマスからランダムに選択
+                    const availSpots = board.map((sq, idx) => (sq === null ? idx : null)).filter(x => x !== null) as number[]
+                    bestMove = availSpots[Math.floor(Math.random() * availSpots.length)]
+                }
                 if (bestMove !== -1) {
                     handleClick(bestMove, true)
                 }
-            }, 500) // 500ms の遅延を追加
+            }, 0)
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPlayer, board, winner])
+    }, [currentPlayer, board, winner, strength])
 
     const handleClick = useCallback((index: number, isAiMove = false) => {
         if (board[index] || winner || (currentPlayer === "O" && !isAiMove)) return
@@ -98,6 +107,17 @@ const TicTacToeB = () => {
                     <p className="text-xl">{currentPlayer === "X" ? "Blue" : "Red"}&apos;s turn</p>
                 )}
             </motion.div>
+            <div className="flex flex-col items-center mb-4">
+                <p className="mb-2">AI Strength: {strength}%</p>
+                <Slider
+                    min={0}
+                    max={100}
+                    step={10}
+                    value={[strength]}
+                    onValueChange={(val) => setStrength(val[0])}
+                    className="w-64"
+                />
+            </div>
             <Button onClick={resetGame} className="bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors duration-200">
                 New Game
             </Button>
