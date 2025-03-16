@@ -14,15 +14,25 @@ const Rankings = () => {
         const fetchRankings = async () => {
             try {
                 const response = await fetch('/api/rankings')
-                const data = await response.json()
+                let data = await response.json()
+                
+                console.log("Fetched data:", data) // デバッグ
+                
+                if (!Array.isArray(data)) {
+                    console.warn("Expected an array but got:", data)
+                    data = [] // 予期しないデータなら空配列にする
+                }
+                
                 setRankings(data)
             } catch (error) {
                 console.error('Error fetching rankings:', error)
+                setRankings([]) // エラー時の対策
             }
         }
-
+    
         fetchRankings()
     }, [])
+    
 
     return (
         <div>

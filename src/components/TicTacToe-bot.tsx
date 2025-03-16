@@ -9,26 +9,18 @@ type Player = "X" | "O" | null
 
 const checkWinner = (squares: Player[]): [Player, number[] | null] => {
     const lines = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],
+        [0, 4, 8], [2, 4, 6],
     ]
-
     for (const [a, b, c] of lines) {
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
             return [squares[a], [a, b, c]]
         }
     }
-
     return [null, null]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const minimax = (newBoard: Player[], player: Player): number => {
     const availSpots = newBoard.reduce((acc, curr, idx) => (curr === null ? acc.concat(idx) : acc), [] as number[])
     const [newWinner] = checkWinner(newBoard)
@@ -53,52 +45,18 @@ const TicTacToeB = () => {
     const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X")
     const [winner, setWinner] = useState<Player>(null)
     const [winningLine, setWinningLine] = useState<number[] | null>(null)
-    const [ipAddress, setIpAddress] = useState<string | null>(null)
 
     useEffect(() => {
-        const fetchIpAddress = async () => {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json')
-                const data = await response.json()
-                setIpAddress(data.ip)
-            } catch (error) {
-                console.error('Error fetching IP address:', error)
+        if (currentPlayer === "O" && !winner) {
+            const bestMove = minimax(board, "O")
+            if (bestMove !== -1) {
+                handleClick(bestMove, true)
             }
         }
+    }, [currentPlayer, board, winner])
 
-        fetchIpAddress()
-    }, [])
-
-    const saveGameResult = useCallback(async (winner: Player) => {
-        const userUuid = localStorage.getItem('user_uuid')
-        if (!userUuid) {
-            console.error('No user UUID found in local storage.')
-            return
-        }
-
-        const result = winner === "X" ? "win" : "lose"
-        try {
-            const response = await fetch('/api/addresult', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ uuid: userUuid, result, ip: ipAddress }),
-            })
-
-            if (!response.ok) {
-                throw new Error('Failed to save game result')
-            }
-
-            const data = await response.json()
-            console.log('Game result inserted into Supabase:', data)
-        } catch (error) {
-            console.error('Error inserting game result into Supabase:', error)
-        }
-    }, [ipAddress])
-
-    const handleClick = useCallback((index: number) => {
-        if (board[index] || winner) return
+    const handleClick = useCallback((index: number, isAiMove = false) => {
+        if (board[index] || winner || (currentPlayer === "O" && !isAiMove)) return
 
         const newBoard = [...board]
         newBoard[index] = currentPlayer
@@ -108,11 +66,10 @@ const TicTacToeB = () => {
         if (newWinner) {
             setWinner(newWinner)
             setWinningLine(newWinningLine)
-            saveGameResult(newWinner)
         } else {
             setCurrentPlayer(currentPlayer === "X" ? "O" : "X")
         }
-    }, [board, currentPlayer, winner, saveGameResult])
+    }, [board, currentPlayer, winner])
 
     const resetGame = () => {
         setBoard(Array(9).fill(null))
@@ -138,18 +95,8 @@ const TicTacToeB = () => {
                     <p className="text-xl">{currentPlayer === "X" ? "Blue" : "Red"}&apos;s turn</p>
                 )}
             </motion.div>
-            <Button
-                onClick={resetGame}
-                className="bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors duration-200"
-            >
+            <Button onClick={resetGame} className="bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors duration-200">
                 New Game
-            </Button>
-            <Button
-                // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-                onClick={() => window.location.href = "/"}
-                className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 mt-4"
-            >
-                Home
             </Button>
         </div>
     )
