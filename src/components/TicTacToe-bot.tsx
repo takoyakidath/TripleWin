@@ -48,11 +48,14 @@ const TicTacToeB = () => {
 
     useEffect(() => {
         if (currentPlayer === "O" && !winner) {
-            const bestMove = minimax(board, "O").index
-            if (bestMove !== -1) {
-                handleClick(bestMove, true)
-            }
+            setTimeout(() => {
+                const bestMove = minimax(board, "O").index
+                if (bestMove !== -1) {
+                    handleClick(bestMove, true)
+                }
+            }, 500) // 500ms の遅延を追加
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPlayer, board, winner])
 
     const handleClick = useCallback((index: number, isAiMove = false) => {

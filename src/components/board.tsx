@@ -28,9 +28,9 @@ const Board: React.FC<BoardProps> = ({ board, winningLine, onSquareClick }) => {
 
   return (
     <div className="relative grid grid-cols-3 gap-0 mb-4 w-[300px] h-[300px]">
-      {board.map((_, index) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-<div key={index} className="border-white">
+{board.map((player, index) => (
+
+<div key={player ? `${player}-${index}` : index} className="border-white">
           {renderSquare(index)}
         </div>
       ))}
@@ -59,8 +59,8 @@ const Board: React.FC<BoardProps> = ({ board, winningLine, onSquareClick }) => {
         transition={{ duration: 0.5, delay: 0.8 }}
       />
       {winningLine && (
-        // biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 <svg className="absolute pointer-events-none" style={{ width: "100%", height: "100%" }}>
+  <title>Winning Line</title>
           <motion.line
             x1={`${(winningLine[0] % 3) * 33.33 + 16.67}%`}
             y1={`${Math.floor(winningLine[0] / 3) * 33.33 + 16.67}%`}
