@@ -27,6 +27,7 @@ export default function Ranking() {
                     <Rankings />
                 </div>
                 <Button
+                    // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
                     onClick={() => window.location.href = "/"}
                     className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 mt-8"
                 >

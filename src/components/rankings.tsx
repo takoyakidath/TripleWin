@@ -1,41 +1,41 @@
 "use client"
-import { useEffect, useState } from 'react';
-import { fetchRankings } from '@/components/rankingSet';
-import { Button } from './ui/button';
 
-export default function Rankings() {
-    const [rankings, setRankings] = useState<{ uuid: string; wins: number }[]>([]);
-    const [myUUID, setMyUUID] = useState<string | null>(null);
+import { useEffect, useState } from "react"
+
+interface Ranking {
+    uuid: string
+    wins: number
+}
+
+const Rankings = () => {
+    const [rankings, setRankings] = useState<Ranking[]>([])
 
     useEffect(() => {
-        const getRankings = async () => {
-            const rankingsData = await fetchRankings();
-            setRankings(rankingsData);
-        };
+        const fetchRankings = async () => {
+            try {
+                const response = await fetch('/api/rankings')
+                const data = await response.json()
+                setRankings(data)
+            } catch (error) {
+                console.error('Error fetching rankings:', error)
+            }
+        }
 
-        const storedUUID = localStorage.getItem('user_uuid');
-        setMyUUID(storedUUID);
-
-        getRankings();
-    }, []);
+        fetchRankings()
+    }, [])
 
     return (
-        <div className='scroll-overflow flex flex-col items-center'>
-            <div style={{ display: 'flex', width: '100%', fontWeight: 'bold' }}>
-                <div style={{ flex: 1, padding: '8px' }}>順位</div>
-                <div style={{ flex: 2, padding: '8px' }}>UUID</div>
-                <div style={{ flex: 1, padding: '8px' }}>勝利数</div>
-            </div>
-            {rankings.map((player, index) => (
-                <div key={player.uuid} style={{ display: 'flex', width: '100%', borderBottom: '1px solid #ccc' }} className='scroll-overflow'>
-                    <div style={{ flex: 1, padding: '8px' }}>{index + 1}</div>
-                    <div style={{ flex: 2, padding: '8px' }}>
-                        {player.uuid}
-                        {player.uuid === myUUID && <span style={{ marginLeft: '8px', color: 'white' }}>←You</span>}
-                    </div>
-                    <div style={{ flex: 1, padding: '8px' }}>{player.wins}</div>
-                </div>
-            ))}
+        <div>
+            <h1>Rankings</h1>
+            <ul>
+                {rankings.map((ranking) => (
+                    <li key={ranking.uuid}>
+                        {ranking.uuid}: {ranking.wins}
+                    </li>
+                ))}
+            </ul>
         </div>
-    );
+    )
 }
+
+export default Rankings

@@ -1,33 +1,18 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabaseClient';
+import { successResponse, errorResponse } from '@/lib/responseHandler';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+export async function POST(req: Request) {
+    const { uuid, ip } = await req.json();
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Missing Supabase URL or anon key');
-}
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
-        const { uuid, ip } = req.body;
-
-        if (!uuid || !ip) {
-            return res.status(400).json({ error: 'UUID and IP are required' });
-        }
-
-        const { data, error } = await supabase
-            .from('users')
-            .insert([{ uuid, ip }]);
-
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
-
-        return res.status(200).json({ data });
-    } else {
-        res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+    if (!uuid || !ip) {
+        return new Response(errorResponse('UUID and IP are required', 400).body, { status: 400 });
     }
+    const { data, error } = await supabase
+        .from('users')
+        .insert([{ uuid, ip }]);
+
+    if (error) {
+        return new Response(errorResponse(error.message, 500).body, { status: 500 });
+    }
+    return new Response(successResponse(data).body, { status: 200 });
 }
