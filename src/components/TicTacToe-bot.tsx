@@ -42,7 +42,7 @@ const minimax = (newBoard: Player[], player: Player): { index: number, score: nu
 
 const TicTacToeB = () => {
     const [board, setBoard] = useState<Player[]>(Array(9).fill(null))
-    const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("O")
+    const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X")
     const [winner, setWinner] = useState<Player>(null)
     const [winningLine, setWinningLine] = useState<number[] | null>(null)
 
@@ -76,7 +76,7 @@ const TicTacToeB = () => {
 
     const resetGame = () => {
         setBoard(Array(9).fill(null))
-        setCurrentPlayer("O")
+        setCurrentPlayer("X")
         setWinner(null)
         setWinningLine(null)
     }
