@@ -21,3 +21,23 @@ export async function fetchRankings(): Promise<{ uuid: string; wins: number }[]>
     }
 }
 
+
+const RankingSet = async () => {
+    const rankings = await fetchRankings();
+
+    return (
+        <div>
+            <h1>Rankings</h1>
+            <ul>
+                {rankings.map((ranking) => (
+                    <li key={ranking.uuid}>
+                        {ranking.uuid}: {ranking.wins}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default RankingSet;
+

@@ -1,51 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import dynamic from "next/dynamic";
 
-interface Ranking {
-    uuid: string
-    wins: number
-}
+const RankingSet = dynamic(() => import("./rankingSet"), { ssr: true });
 
 const Rankings = () => {
-    const [rankings, setRankings] = useState<Ranking[]>([])
-
-    useEffect(() => {
-        const fetchRankings = async () => {
-            try {
-                const response = await fetch('/api/rankings')
-                let data = await response.json()
-                
-                console.log("Fetched data:", data) // デバッグ
-                
-                if (!Array.isArray(data)) {
-                    console.warn("Expected an array but got:", data)
-                    data = [] // 予期しないデータなら空配列にする
-                }
-                
-                setRankings(data)
-            } catch (error) {
-                console.error('Error fetching rankings:', error)
-                setRankings([]) // エラー時の対策
-            }
-        }
-    
-        fetchRankings()
-    }, [])
-    
-
     return (
         <div>
-            <h1>Rankings</h1>
-            <ul>
-                {rankings.map((ranking) => (
-                    <li key={ranking.uuid}>
-                        {ranking.uuid}: {ranking.wins}
-                    </li>
-                ))}
-            </ul>
+            <RankingSet />
         </div>
-    )
-}
+    );
+};
 
-export default Rankings
+export default Rankings;
