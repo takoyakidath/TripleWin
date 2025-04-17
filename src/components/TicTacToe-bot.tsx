@@ -110,11 +110,11 @@ const TicTacToeB = () => {
             <div className="flex flex-col items-center mb-4">
                 <p className="mb-2">AI Strength: {strength}%</p>
                 <Slider
+                    value={[strength]}
+                    onValueChange={(val) => setStrength(val[0])}
                     min={0}
                     max={100}
                     step={10}
-                    value={[strength]}
-                    onValueChange={(val) => setStrength(val[0])}
                     className="w-64"
                 />
             </div>
