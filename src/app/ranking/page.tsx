@@ -15,7 +15,7 @@ export default function Ranking() {
     return (
         <div>
             {isEditing && <EditUser onClose={handleEditUserClick} isOpen={isEditing} />}
-            <Card className="bg-gray-700 text-primary-foreground border border-gray-700 shadow m-4 p-4">
+            <Card className="bg-gray-700 text-primary-foreground border border-gray-700 shadow-sm m-4 p-4">
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-4xl font-bold">Ranking</h1>
                     <Button onClick={handleEditUserClick} className="ml-4">
