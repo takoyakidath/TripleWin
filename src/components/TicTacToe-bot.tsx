@@ -46,7 +46,7 @@ const TicTacToeB = () => {
     const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X")
     const [winner, setWinner] = useState<Player>(null)
     const [winningLine, setWinningLine] = useState<number[] | null>(null)
-    const [strength, setStrength] = useState(50) // 初期値50（50%の確率で賢く動く）
+    const [strength, setStrength] = useState(80) // 初期値50（50%の確率で賢く動く）
 
     useEffect(() => {
         if (currentPlayer === "O" && !winner) {
