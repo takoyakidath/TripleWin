@@ -3,7 +3,7 @@ import { supabase } from '../../../lib/supabaseClient';
 
 export async function GET() {
     const { data, error } = await supabase
-        .from('game_result')
+        .from('game_results')
         .select('userid, username, number')
         .order('number', { ascending: false });
 
