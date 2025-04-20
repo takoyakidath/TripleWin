@@ -1,6 +1,6 @@
-"use server"
+"use client"
 
-export async function fetchRankings(): Promise<{ uuid: string; wins: number }[]> {
+export async function fetchRankings(): Promise<{ userid: string; displayName: string; number: string }[]> {
     try {
         const response = await fetch(`${window.location.origin}/api/rankings`, {
             method: 'GET',
@@ -21,20 +21,38 @@ export async function fetchRankings(): Promise<{ uuid: string; wins: number }[]>
     }
 }
 
+import { useEffect, useState } from 'react';
 
-const RankingSet = async () => {
-    const rankings = await fetchRankings();
+const RankingSet = () => {
+    const [rankings, setRankings] = useState<{ userid: string; displayName: string; number: string }[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const fetchedRankings = await fetchRankings();
+            setRankings(fetchedRankings);
+        };
+        fetchData();
+    }, []); // Close the useEffect
 
     return (
         <div>
             <h1>Rankings</h1>
-            <ul>
-                {rankings.map((ranking) => (
-                    <li key={ranking.uuid}>
-                        {ranking.uuid}: {ranking.wins}
-                    </li>
-                ))}
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Display Name</th>
+                        <th>Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rankings.map((ranking) => (
+                        <tr key={ranking.userid}>
+                            <td>{ranking.displayName}</td>
+                            <td>{ranking.number}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

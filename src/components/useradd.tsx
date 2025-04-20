@@ -9,21 +9,25 @@ export default function Useradd() {
 
     useEffect(() => {
         const createUser = async () => {
-            const uuid = uuidv4();
-            localStorage.setItem('user_uuid', uuid);
-            console.log('User created with UUID:', uuid);
+            const user = {
+                uuid: uuidv4(),
+                ip: '' // Placeholder for IP
+            };
+            localStorage.setItem('user_uuid', user.uuid);
+            console.log('User created with UUID:', user.uuid);
 
             const response = await fetch('https://api.ipify.org?format=json');
             const data = await response.json();
             const ip = data.ip;
             console.log('User IP Address:', ip);
 
-            const { data: supabaseData, error } = await supabase
+            // Insert user into the users table
+            const { data: supabaseData, error: userError } = await supabase
                 .from('users')
-                .insert([{ uuid, ip }]);
+                .insert([{ uuid: user.uuid, ip: user.ip }]);
 
-            if (error) {
-                console.error('Error inserting UUID and IP into Supabase:', error.message, error.details);
+            if (userError) {
+                console.error('Error inserting UUID and IP into Supabase:', userError.message, userError.details);
                 router.refresh();
                 return;
             }
