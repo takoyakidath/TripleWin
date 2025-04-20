@@ -1,7 +1,7 @@
 "use client"
 import { useState } from 'react';
 import { Card } from "@/components/ui/card";
-import Rankings from "@/components/rankings";
+//import Rankings from "@/components/rankings";
 import { Button } from "@/components/ui/button";
 import EditUser from "@/components/EditUser";
 
@@ -24,7 +24,7 @@ export default function Ranking() {
                 </div>
                 <p>This ranking is created based on bot data.</p>
                 <div style={{ height: '200px', overflowY: 'auto' }}>
-                    <Rankings />
+                    開発中
                 </div>
                 <Button
                     // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
