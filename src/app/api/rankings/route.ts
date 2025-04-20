@@ -1,29 +1,21 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabaseClient';
-import { successResponse, errorResponse } from '@/lib/responseHandler';
+import { supabase } from '../../../lib/supabaseClient';
 
-export const GET = async () => {
+export async function GET() {
     const { data, error } = await supabase
-        .from('game_results')
-        .select('uuid, result')
-        .eq('result', 'win');
+        .from('game_result')
+        .select('userid, username, number')
+        .order('number', { ascending: false });
 
     if (error) {
-        return NextResponse.json(errorResponse(error.message, 500), { status: 500 });
+        return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
-    if (!data || data.length === 0) {
-        return NextResponse.json(successResponse([])); // ゲーム結果がない場合は空配列を返す
-    }
+    const rankings = data.map((item) => ({
+        userid: item.userid,
+        displayName: item.username || item.userid, // Use username or userid if username is null
+        number: item.number,
+    }));
 
-    const winCounts = data.reduce((acc, { uuid }) => {
-        acc[uuid] = (acc[uuid] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
-
-    const sortedRankings = Object.entries(winCounts)
-        .map(([uuid, wins]) => ({ uuid, wins }))
-        .sort((a, b) => b.wins - a.wins); // 勝利数で降順にソート
-
-    return NextResponse.json(successResponse(sortedRankings));
-};
+    return NextResponse.json(rankings);
+}

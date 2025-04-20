@@ -1,32 +1,44 @@
-import { supabase } from '@/lib/supabaseClient';
-import { successResponse, errorResponse } from '@/lib/responseHandler';
-import { type NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import { supabase } from '../../../lib/supabaseClient';
+import { v4 as uuidv4 } from 'uuid'; // Importing UUID using ES module syntax
 
-export async function POST(req: NextRequest) {
-    try {
-        // リクエストボディを取得
-        const { uuid, result, ip } = await req.json();
+export async function POST(request: Request) {
+    const { userid, win } = await request.json();
 
-        // 必要なパラメータが送信されているか確認
-        if (!uuid || !result || !ip) {
-            return NextResponse.json(errorResponse('UUID, result, and IP are required', 400), { status: 400 });
-        }
-
-        // game_resultsテーブルにデータを挿入
-        const { data, error } = await supabase
-            .from('game_results')
-            .insert([{ uuid, result, ip }]);
-
-        // エラーが発生した場合
-        if (error) {
-            return NextResponse.json(errorResponse(error.message, 500), { status: 500 });
-        }
-
-        // 挿入したデータを成功レスポンスで返す
-        return NextResponse.json(successResponse(data), { status: 200 });
-    } catch (error: unknown) {
-        // 予期しないエラーが発生した場合
-        const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
-        return NextResponse.json(errorResponse(errorMessage, 500), { status: 500 });
+    // Check if it's the first visit
+    if (!userid) {
+        const randomUserId = uuidv4(); // Generate a UUID
+        await supabase
+            .from('game_result')
+            .insert([{ userid: randomUserId, number: 0, username: null }]);
+        return NextResponse.json({ userid: randomUserId });
     }
+
+    // Update the number if the user wins
+    if (win) {
+        const { data, error } = await supabase
+            .from('game_result')
+            .select('number')
+            .eq('userid', userid);
+
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 400 });
+        }
+
+        if (data && data.length > 0) {
+            const newNumber = data[0].number + 1;
+            const { error: updateError } = await supabase
+                .from('game_result')
+                .update({ number: newNumber })
+                .eq('userid', userid);
+
+            if (updateError) {
+                return NextResponse.json({ error: updateError.message }, { status: 400 });
+            }
+        } else {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        }
+    }
+
+    return NextResponse.json({ success: true, message: 'Result updated successfully' });
 }

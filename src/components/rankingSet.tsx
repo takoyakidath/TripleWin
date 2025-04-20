@@ -2,7 +2,7 @@
 
 export async function fetchRankings(): Promise<{ uuid: string; wins: number }[]> {
     try {
-        const response = await fetch('/api/rankings', {
+        const response = await fetch(`${window.location.origin}/api/rankings`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,4 +40,3 @@ const RankingSet = async () => {
 };
 
 export default RankingSet;
-
