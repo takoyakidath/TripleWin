@@ -14,7 +14,9 @@ export default function Useradd() {
                 userid: uuidv4(),
                 username: 'New User' // Placeholder for username
             };
-            localStorage.setItem('user_id', user.userid);
+            console.log('Creating user with ID:', user.userid); // Debug log
+            console.log('User creation process started.'); // Additional debug log
+            localStorage.setItem('user_uuid', user.userid);
             console.log('User created with ID:', user.userid);
 
             try {
