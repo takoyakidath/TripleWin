@@ -8,6 +8,10 @@ export default function Useradd() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
 
+    const handleClick = () => {
+        console.log('Handle click function executed'); // Placeholder functionality
+    };
+
     useEffect(() => {
         const createUser = async () => {
             const user = {
@@ -25,7 +29,7 @@ export default function Useradd() {
                     .insert([{ userid: user.userid, username: user.username }]);
 
                 if (error) {
-                    console.error('An error occurred while adding the user.');
+                    console.error('An error occurred while adding the user:', error.message || error);
                     router.refresh();
                     return;
                 }
@@ -39,11 +43,11 @@ export default function Useradd() {
         };
 
         const checkUser = async () => {
-            const userId = localStorage.getItem('user_id');
-            if (!userId) {
+            const username = localStorage.getItem('username');
+            if (!username) {
                 await createUser();
             } else {
-                console.log('User already exists with ID:', userId);
+                console.log('User already exists with username:', username);
                 setLoading(false);
             }
         };
@@ -51,5 +55,10 @@ export default function Useradd() {
         checkUser();
     }, [router]);
 
-    return <div>{loading ? 'ユーザーを作成中...' : 'ユーザーが作成されました。'}</div>;
+    return (
+    <div>
+        {loading ? 'ユーザーを作成中...' : 'ユーザーが作成されました。'}
+        <button type="button" onClick={handleClick}>Click Me</button>
+    </div>
+);
 }
