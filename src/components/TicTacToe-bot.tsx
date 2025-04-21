@@ -48,6 +48,22 @@ const TicTacToeB = () => {
     const [winningLine, setWinningLine] = useState<number[] | null>(null)
     const [strength, setStrength] = useState(80) // 初期値50（50%の確率で賢く動く）
 
+    const handleClick = useCallback((index: number, isAiMove = false) => {
+        if (board[index] || winner || (currentPlayer === "O" && !isAiMove)) return
+
+        const newBoard = [...board]
+        newBoard[index] = currentPlayer
+        setBoard(newBoard)
+
+        const [newWinner, newWinningLine] = checkWinner(newBoard)
+        if (newWinner) {
+            setWinner(newWinner)
+            setWinningLine(newWinningLine)
+        } else {
+            setCurrentPlayer(currentPlayer === "X" ? "O" : "X")
+        }
+    }, [board, currentPlayer, winner])
+
     useEffect(() => {
         if (currentPlayer === "O" && !winner) {
             setTimeout(() => {
@@ -65,23 +81,7 @@ const TicTacToeB = () => {
                 }
             }, 0)
         }
-    }, [currentPlayer, board, winner, strength])
-
-    const handleClick = useCallback((index: number, isAiMove = false) => {
-        if (board[index] || winner || (currentPlayer === "O" && !isAiMove)) return
-
-        const newBoard = [...board]
-        newBoard[index] = currentPlayer
-        setBoard(newBoard)
-
-        const [newWinner, newWinningLine] = checkWinner(newBoard)
-        if (newWinner) {
-            setWinner(newWinner)
-            setWinningLine(newWinningLine)
-        } else {
-            setCurrentPlayer(currentPlayer === "X" ? "O" : "X")
-        }
-    }, [board, currentPlayer, winner])
+    }, [currentPlayer, board, winner, strength, handleClick]) // Added handleClick here
 
     const resetGame = () => {
         setBoard(Array(9).fill(null))
