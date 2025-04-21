@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 export async function fetchRankings(): Promise<{ userid: string; displayName: string; number: string }[]> {
     try {
@@ -14,7 +14,12 @@ export async function fetchRankings(): Promise<{ userid: string; displayName: st
         }
 
         const data = await response.json();
-        return data;
+        const maxSize = 36; // 最大サイズを定義
+        const trimmedData = data.map((item: { userid: string; displayName: string; number: string }) => ({
+            ...item,
+            userid: item.userid.length > maxSize ? item.userid.slice(0, maxSize) : item.userid, // 切り捨て処理
+        }));
+        return trimmedData;
     } catch (error) {
         console.error('Error fetching rankings:', error);
         return [];
@@ -29,7 +34,8 @@ const RankingSet = () => {
     useEffect(() => {
         const fetchData = async () => {
             const fetchedRankings = await fetchRankings();
-            setRankings(fetchedRankings);
+            const sortedRankings = fetchedRankings.sort((a, b) => Number.parseInt(b.number) - Number.parseInt(a.number));
+            setRankings(sortedRankings);
         };
         fetchData();
     }, []); // Close the useEffect
@@ -41,7 +47,7 @@ const RankingSet = () => {
                 <thead>
                     <tr>
                         <th>Display Name</th>
-                        <th>Number</th>
+                        <th>Wins</th>
                     </tr>
                 </thead>
                 <tbody>

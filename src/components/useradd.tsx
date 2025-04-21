@@ -1,51 +1,53 @@
 "use client"
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/navigation';
 
 export default function Useradd() {
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const createUser = async () => {
             const user = {
-                uuid: uuidv4(),
-                ip: '' // Placeholder for IP
+                userid: uuidv4(),
+                username: 'New User' // Placeholder for username
             };
-            localStorage.setItem('user_uuid', user.uuid);
-            console.log('User created with UUID:', user.uuid);
+            localStorage.setItem('user_id', user.userid);
+            console.log('User created with ID:', user.userid);
 
-            const response = await fetch('https://api.ipify.org?format=json');
-            const data = await response.json();
-            const ip = data.ip;
-            console.log('User IP Address:', ip);
+            try {
+                const { error } = await supabase
+                    .from('users')
+                    .insert([{ userid: user.userid, username: user.username }]);
 
-            // Insert user into the users table
-            const { data: supabaseData, error: userError } = await supabase
-                .from('users')
-                .insert([{ uuid: user.uuid, ip: user.ip }]);
+                if (error) {
+                    console.error('An error occurred while adding the user.');
+                    router.refresh();
+                    return;
+                }
 
-            if (userError) {
-                console.error('Error inserting UUID and IP into Supabase:', userError.message, userError.details);
-                router.refresh();
-                return;
+                console.log('User inserted into Supabase:', user);
+            } catch (error) {
+                console.error('Error inserting user:', error);
+            } finally {
+                setLoading(false);
             }
-
-            console.log('UUID and IP inserted into Supabase:', supabaseData);
         };
 
         const checkUser = async () => {
-            const userUuid = localStorage.getItem('user_uuid');
-            if (!userUuid) {
+            const userId = localStorage.getItem('user_id');
+            if (!userId) {
                 await createUser();
             } else {
-                console.log('User already exists with UUID:', userUuid);
+                console.log('User already exists with ID:', userId);
+                setLoading(false);
             }
         };
 
         checkUser();
     }, [router]);
 
-    return <div>ユーザーを作成中...</div>;
+    return <div>{loading ? 'ユーザーを作成中...' : 'ユーザーが作成されました。'}</div>;
 }
