@@ -1,5 +1,3 @@
-"use client";
-
 export async function fetchRankings(): Promise<{ userid: string; displayName: string; number: string }[]> {
     try {
         const response = await fetch(`${window.location.origin}/api/rankings`, {
@@ -26,19 +24,9 @@ export async function fetchRankings(): Promise<{ userid: string; displayName: st
     }
 }
 
-import { useEffect, useState } from 'react';
-
-const RankingSet = () => {
-    const [rankings, setRankings] = useState<{ userid: string; displayName: string; number: string }[]>([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const fetchedRankings = await fetchRankings();
-            const sortedRankings = fetchedRankings.sort((a, b) => Number.parseInt(b.number) - Number.parseInt(a.number));
-            setRankings(sortedRankings);
-        };
-        fetchData();
-    }, []); // Close the useEffect
+const RankingSet = async () => {
+    const fetchedRankings = await fetchRankings();
+    const sortedRankings = fetchedRankings.sort((a, b) => Number.parseInt(b.number) - Number.parseInt(a.number));
 
     return (
         <div>
@@ -51,7 +39,7 @@ const RankingSet = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {rankings.map((ranking) => (
+                    {sortedRankings.map((ranking) => (
                         <tr key={ranking.userid}>
                             <td>{ranking.displayName}</td>
                             <td>{ranking.number}</td>

@@ -16,7 +16,7 @@ export default function Useradd() {
         const createUser = async () => {
             const user = {
                 userid: uuidv4(),
-                username: 'New User' // Placeholder for username
+                username: 'null' // Placeholder for username
             };
             console.log('Creating user with ID:', user.userid); // Debug log
             console.log('User creation process started.'); // Additional debug log
