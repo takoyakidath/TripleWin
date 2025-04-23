@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from 'react';
+
 export async function fetchRankings(): Promise<{ userid: string; displayName: string; number: string }[]> {
     try {
         const response = await fetch(`${window.location.origin}/api/rankings`, {
@@ -7,11 +9,13 @@ export async function fetchRankings(): Promise<{ userid: string; displayName: st
             },
         });
 
+        
         if (!response.ok) {
             throw new Error('Failed to fetch rankings');
         }
 
         const data = await response.json();
+        
         const maxSize = 36; // 最大サイズを定義
         const trimmedData = data.map((item: { userid: string; displayName: string; number: string }) => ({
             ...item,
@@ -24,9 +28,18 @@ export async function fetchRankings(): Promise<{ userid: string; displayName: st
     }
 }
 
-const RankingSet = async () => {
-    const fetchedRankings = await fetchRankings();
-    const sortedRankings = fetchedRankings.sort((a, b) => Number.parseInt(b.number) - Number.parseInt(a.number));
+const RankingSet = () => {
+    const [sortedRankings, setSortedRankings] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const fetchedRankings = await fetchRankings();
+            const sorted = fetchedRankings.sort((a, b) => Number.parseInt(b.number) - Number.parseInt(a.number));
+            setSortedRankings(sorted);
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <div>
@@ -42,7 +55,7 @@ const RankingSet = async () => {
                     {sortedRankings.map((ranking) => (
                         <tr key={ranking.userid}>
                             <td>{ranking.displayName}</td>
-                            <td>{ranking.number}</td>
+                            <td>{ranking.number !== null ? ranking.number : '0'}</td>
                         </tr>
                     ))}
                 </tbody>
