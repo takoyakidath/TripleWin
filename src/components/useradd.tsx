@@ -1,13 +1,11 @@
 "use client"
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from 'next/navigation';
 
 export default function Useradd() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-
 
     useEffect(() => {
         const createUser = async () => {
@@ -25,8 +23,11 @@ export default function Useradd() {
                     .insert([{ userid: user.userid }]);
 
                 if (error) {
-                    console.error('An error occurred while adding the user:', error.message || error);
-                    router.refresh();
+                    if (error) {
+                        console.error('An error occurred while adding the user:', error.message || error);
+                    } else {
+                        console.error('An error occurred while adding the user: Unknown error');
+                    }
                     return;
                 }
 
@@ -35,6 +36,8 @@ export default function Useradd() {
                 console.error('Error inserting user:', error);
             } finally {
                 setLoading(false);
+                // router.refresh()をここで呼び出す
+                router.refresh();
             }
         };
 

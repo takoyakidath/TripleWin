@@ -1,25 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabaseClient';
-import { v4 as uuidv4 } from 'uuid'; // UUID生成のためのライブラリをインポート
+import { v4 as uuidv4 } from 'uuid'; // UUID generation library
 
 export async function POST() {
-
-
-    // Check if the user already exists
-    const { data: existingUsers, error: fetchError } = await supabase
-        .from('game_results')
-        .select('userid')
-
-
-    if (fetchError) {
-        return NextResponse.json({ error: fetchError.message }, { status: 400 });
-    }
-
-    // If the user already exists, return the existing user
-    if (existingUsers.length > 0) {
-        return NextResponse.json({ user: existingUsers[0] });
-    }
-
     // Generate a new UUID
     const newUUID = uuidv4();
 
@@ -35,7 +18,8 @@ export async function POST() {
 
     // Assuming the user ID is returned in the data
     const user = data[0];
-    localStorage.setItem('user_uuid', user.id); // Set the user ID in local storage
+    // Note: localStorage is not available in server-side code, consider removing this line
+    // localStorage.setItem('user_uuid', user.id); // Set the user ID in local storage
 
     return NextResponse.json({ user });
 }
