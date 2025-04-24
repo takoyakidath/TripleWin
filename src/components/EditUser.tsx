@@ -37,7 +37,11 @@ export default function EditUser({ isOpen, onClose }: EditUserProps) {
             .eq('userID', oldUserID);
 
         if (error) {
-            console.error('Error updating user UUID in Supabase:', error.message, error.details);
+            if (error) {
+                console.error('Error updating user UUID in Supabase:', error);
+            } else {
+                console.error('Error updating user UUID in Supabase: Unknown error occurred.');
+            }
         } else if (data) {
             console.log('User UUID updated in Supabase:', data);
         } else {

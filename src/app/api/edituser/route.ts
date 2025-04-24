@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '../../../lib/supabaseClient';
 
-export async function POST(request: Request) {
+export async function PATCH(request: Request) {
     const { userid, username } = await request.json();
 
     if (!userid || !username) {
@@ -14,6 +14,7 @@ export async function POST(request: Request) {
         .eq('userid', userid);
 
     if (error) {
+        console.error('Error updating user:', error);
         return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
