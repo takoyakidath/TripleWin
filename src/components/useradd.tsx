@@ -8,9 +8,6 @@ export default function Useradd() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
 
-    const handleClick = () => {
-        console.log('Handle click function executed'); // Placeholder functionality
-    };
 
     useEffect(() => {
         const createUser = async () => {
@@ -25,7 +22,7 @@ export default function Useradd() {
             try {
                 const { error } = await supabase
                     .from('users')
-                    .insert([{ userid: user.userid, username: user.username }]);
+                    .insert([{ userid: user.userid }]);
 
                 if (error) {
                     console.error('An error occurred while adding the user:', error.message || error);
@@ -42,11 +39,11 @@ export default function Useradd() {
         };
 
         const checkUser = async () => {
-            const username = localStorage.getItem('username');
-            if (!username) {
+            const user_uuid = localStorage.getItem('user_uuid');
+            if (!user_uuid) {
                 await createUser();
             } else {
-                console.log('User already exists with username:', username);
+                console.log('User already exists with user_uuid:', user_uuid);
                 setLoading(false);
             }
         };
@@ -57,7 +54,6 @@ export default function Useradd() {
     return (
     <div>
         {loading ? 'ユーザーを作成中...' : 'ユーザーが作成されました。'}
-        <button type="button" onClick={handleClick}>Click Me</button>
     </div>
 );
 }

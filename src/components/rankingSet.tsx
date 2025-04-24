@@ -29,7 +29,7 @@ export async function fetchRankings(): Promise<{ userid: string; displayName: st
 }
 
 const RankingSet = () => {
-    const [sortedRankings, setSortedRankings] = useState([]);
+    const [sortedRankings, setSortedRankings] = useState<{ userid: string; displayName: string; number: string }[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
