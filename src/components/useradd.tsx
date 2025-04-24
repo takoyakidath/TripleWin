@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 
@@ -19,7 +20,7 @@ export default function Useradd() {
 
             try {
                 const { error } = await supabase
-                    .from('users')
+                    .from('game_results')
                     .insert([{ userid: user.userid }]);
 
                 if (error) {
@@ -59,4 +60,6 @@ export default function Useradd() {
         {loading ? 'ユーザーを作成中...' : 'ユーザーが作成されました。'}
     </div>
 );
+// Removed the unused uuidv4 function as we are now using the 'uuid' library.
 }
+

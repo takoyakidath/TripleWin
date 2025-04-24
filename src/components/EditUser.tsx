@@ -32,7 +32,7 @@ export default function EditUser({ isOpen, onClose }: EditUserProps) {
         console.log('User userID updated to', userID);
 
         const { data, error } = await supabase
-            .from('users')
+            .from('game')
             .update({ userID: userID })
             .eq('userID', oldUserID);
 
