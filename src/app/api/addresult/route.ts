@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '../../../lib/supabaseClient';
+import { checkGameResultTable } from '../../../lib/responseHandler';
 import { v4 as uuidv4 } from 'uuid'; // Importing UUID using ES module syntax
 
 export async function POST(request: Request) {
+    // Check if the game_result table exists
+    const tableExists = await checkGameResultTable();
+    if (tableExists === null) {
+        return NextResponse.json({ error: 'The game_result table does not exist.' }, { status: 404 });
+    }
+
     const { userid, win } = await request.json();
 
     // Check if it's the first visit

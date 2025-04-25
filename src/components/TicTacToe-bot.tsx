@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
 import Board from "@/components/board"
+import { useRouter } from "next/navigation" // Add this import
 
 type Player = "X" | "O" | null
 
@@ -42,13 +43,15 @@ const minimax = (newBoard: Player[], player: Player): { index: number, score: nu
 }
 
 const TicTacToeB = () => {
+    const router = useRouter(); // Add this line
+    const userId = "placeholder_user_id"; // Define userId here
     const [board, setBoard] = useState<Player[]>(Array(9).fill(null))
     const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X")
     const [winner, setWinner] = useState<Player>(null)
     const [winningLine, setWinningLine] = useState<number[] | null>(null)
     const [strength, setStrength] = useState(80) // 初期値50（50%の確率で賢く動く）
 
-    const handleClick = useCallback((index: number, isAiMove = false) => {
+    const handleClick = useCallback(async (index: number, isAiMove = false) => {
         if (board[index] || winner || (currentPlayer === "O" && !isAiMove)) return
 
         const newBoard = [...board]
@@ -59,6 +62,18 @@ const TicTacToeB = () => {
         if (newWinner) {
             setWinner(newWinner)
             setWinningLine(newWinningLine)
+
+            // Call the addresult API
+            const response = await fetch('/api/addresult', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userid: userId, win: true }),
+            });
+
+            const result = await response.json();
+            console.log(result); // Handle the response as needed
         } else {
             setCurrentPlayer(currentPlayer === "X" ? "O" : "X")
         }
@@ -120,6 +135,9 @@ const TicTacToeB = () => {
             </div>
             <Button onClick={resetGame} className="bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors duration-200">
                 New Game
+            </Button>
+            <Button onClick={() => router.push('/')} className="bg-gray-200 text-gray-800 hover:bg-gray-300 transition-colors duration-200">
+                Home
             </Button>
         </div>
     )

@@ -11,3 +11,17 @@ export const errorResponse = (message: string, status: number) => {
         body: JSON.stringify({ error: message }),
     };
 };
+
+import { supabase } from './supabaseClient';
+
+export const checkGameResultTable = async () => {
+    const { data, error } = await supabase
+        .from('game_result')
+        .select('*')
+        .limit(1);
+
+    if (error) {
+        return null; // Table does not exist or another error occurred
+    }
+    return data; // Table exists
+};
