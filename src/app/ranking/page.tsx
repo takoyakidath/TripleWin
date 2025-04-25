@@ -1,5 +1,4 @@
 "use client"
-import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import Rankings from "@/components/rankings";
 import { Button } from "@/components/ui/button";
