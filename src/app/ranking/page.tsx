@@ -3,24 +3,24 @@ import { useState } from 'react';
 import { Card } from "@/components/ui/card";
 import Rankings from "@/components/rankings";
 import { Button } from "@/components/ui/button";
-import EditUser from "@/components/EditUser";
+// import EditUser from "@/components/EditUser";
 
 export default function Ranking() {
-    const [isEditing, setIsEditing] = useState(false);
+    // const [isEditing, setIsEditing] = useState(false);
 
-    const handleEditUserClick = () => {
-        setIsEditing(!isEditing);
-    };
+    // const handleEditUserClick = () => {
+    //     setIsEditing(!isEditing);
+    // };
 
     return (
         <div>
-            {isEditing && <EditUser onClose={handleEditUserClick} isOpen={isEditing} />}
+            {/* {isEditing && <EditUser onClose={handleEditUserClick} isOpen={isEditing} />} */}
             <Card className="bg-gray-700 text-primary-foreground border border-gray-700 shadow-sm m-4 p-4">
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-4xl font-bold">Ranking</h1>
-                    <Button onClick={handleEditUserClick} className="ml-4">
+                    {/*<Button onClick={handleEditUserClick} className="ml-4">
                         {isEditing ? 'Close Edit' : 'Edit User'}
-                    </Button>
+                    </Button> */}
                 </div>
                 <p>This ranking is created based on bot data.</p>
                 <div style={{ height: '200px', overflowY: 'auto' }}>
