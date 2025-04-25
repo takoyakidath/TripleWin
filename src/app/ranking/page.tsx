@@ -33,6 +33,7 @@ export default function Ranking() {
                 >
                     Home
                 </Button>
+                * たまに、バグって追加されないことがあります
             </Card>
         </div>
     );
