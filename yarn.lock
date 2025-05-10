@@ -3985,10 +3985,10 @@ set-proto@^1.0.0:
     es-errors "^1.3.0"
     es-object-atoms "^1.0.0"
 
-shadcn@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.npmjs.org/shadcn/-/shadcn-2.4.1.tgz"
-  integrity sha512-QbOT0vwyYxCTLfvzR4lTIJHlc/e+Sqch3xogaGjCKjvrjd+0hbNZc2vBcFEFH69VI+PN167lvkQahXGd53+XQQ==
+shadcn@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/shadcn/-/shadcn-2.5.0.tgz#89af0bf2c31db9d192ea32cfe279ae2fec5ff758"
+  integrity sha512-kqbTpDWIYE8spytMiJFoKyzOTHb+DzNLjMXzz+ifDFTBgTPv6gIydmirTZwwfFb23XvenrTSVHsZHUjGsllcHw==
   dependencies:
     "@antfu/ni" "^23.2.0"
     "@babel/core" "^7.22.1"
