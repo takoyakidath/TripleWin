@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 export async function fetchRankings(): Promise<{ userid: string; displayName: string; number: string }[]> {
     try {
-        const response = await fetch(`${window.location.origin}/api/rankings`, {
+        const response = await fetch('/api/rankings', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
