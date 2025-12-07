@@ -62,18 +62,6 @@ const TicTacToeB = () => {
         if (newWinner) {
             setWinner(newWinner)
             setWinningLine(newWinningLine)
-
-            // Call the addresult API
-            const response = await fetch('/api/addresult', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userid: userId, win: true }),
-            });
-
-            const result = await response.json();
-            console.log(result); // Handle the response as needed
         } else {
             setCurrentPlayer(currentPlayer === "X" ? "O" : "X")
         }

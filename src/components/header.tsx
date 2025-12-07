@@ -1,6 +1,4 @@
 "use client"
-
-/* import Link from "next/link"; */
 import { Pacifico } from "next/font/google";
 
 const RampartOneFont = Pacifico({
