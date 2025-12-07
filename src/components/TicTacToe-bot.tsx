@@ -44,7 +44,6 @@ const minimax = (newBoard: Player[], player: Player): { index: number, score: nu
 
 const TicTacToeB = () => {
     const router = useRouter(); // Add this line
-    const userId = "placeholder_user_id"; // Define userId here
     const [board, setBoard] = useState<Player[]>(Array(9).fill(null))
     const [currentPlayer, setCurrentPlayer] = useState<"X" | "O">("X")
     const [winner, setWinner] = useState<Player>(null)
