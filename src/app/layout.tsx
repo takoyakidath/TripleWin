@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import StringBackground from "@/components/background";
 import { Toaster } from "@/components/ui/sonner"
+import { Analytics } from '@vercel/analytics/next';
 export const metadata: Metadata = {
   title: "TripleWin",
   description: "This is TripleWin",
@@ -26,7 +27,7 @@ export default function RootLayout({
       <Toaster />
         </div>
       </div>
-
+      <Analytics />
       </body>
     </html>
   );
